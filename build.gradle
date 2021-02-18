@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+    id 'com.diffplug.spotless'
+}
+
+ext {
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = 'com.manomano.kata'
+version = '1.0.0'
+sourceCompatibility = '11'
+
+bootRun {
+    systemProperties = System.properties
+}
+
+sourceSets {
+    testIntegration {
+        java.srcDirs = ['src/testIntegration/java']
+        resources.srcDirs = ['src/testIntegration/resources']
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+configurations {
+    testIntegrationImplementation.extendsFrom testImplementation
+    testIntegrationCompileOnly.extendsFrom testCompileOnly
+    testIntegrationRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+task testIntegration(type: Test) {
+    group = 'verification'
+    description = 'Run the integration tests.'
+    testClassesDirs = sourceSets.testIntegration.output.classesDirs
+    classpath = sourceSets.testIntegration.runtimeClasspath
+    outputs.upToDateWhen { false }
+    useJUnitPlatform()
+}
+
+dependencies {
+    implementation(
+            platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"),
+            "org.springframework.boot:spring-boot-starter-web",
+    )
+
+    testImplementation(
+            "org.springframework.boot:spring-boot-starter-test"
+    )
+}
+
+test {
+    useJUnitPlatform()
+}

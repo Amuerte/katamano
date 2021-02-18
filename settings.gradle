@@ -1,0 +1,12 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    plugins {
+        id "org.springframework.boot" version "${springBootVersion}"
+        id "com.diffplug.spotless" version '5.10.2'
+    }
+}
+
+rootProject.name = 'katamano'
